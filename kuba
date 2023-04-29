@@ -1,0 +1,111 @@
+Предположим, что мы разрабатываем веб-сайт для приложения заметок. Он будет предоставлять пользователю возможность создавать, редактировать и удалять заметки, а также искать заметки.
+
+Вот архитектура и пример кода на JavaScript для реализации этой задачи:
+
+Архитектура:
+
+1. Фронтенд часть будет создана с помощью HTML, CSS и JavaScript.
+2. Бэкенд часть будет написана на языке программирования, например, на Node.js.
+3. База данных будет использоваться для хранения заметок.
+
+Пример кода:
+
+HTML:
+
+```html
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>Мои заметки</title>
+   </head>
+   <body>
+      <header>
+         <h1>Мои заметки</h1>
+         <nav>
+            <ul>
+               <li><a href="#">Главная</a></li>
+               <li><a href="#">О нас</a></li>
+               <li><a href="#">Контакты</a></li>
+               <li><a href="#">Войти</a></li>
+            </ul>
+         </nav>
+      </header>
+      <main>
+         <section>
+            <h2>Создать заметку:</h2>
+            <form>
+               <input type="text" name="title" placeholder="Заголовок"><br>
+               <textarea name="body" placeholder="Текст заметки"></textarea><br>
+               <button type="submit">Создать</button>
+            </form>
+         </section>
+         <section>
+            <h2>Мои заметки:</h2>
+            <ul id="notesList"></ul>
+         </section>
+      </main>
+      <footer>
+         <p>© 2021 Мои заметки</p>
+      </footer>
+      <script src="/js/app.js"></script>
+   </body>
+</html>
+```
+
+JavaScript:
+
+```javascript
+// отправка AJAX-запроса на сервер для получения списка заметок
+function loadNotes() {
+   const xhr = new XMLHttpRequest();
+   xhr.open('GET', '/api/notes');
+   xhr.onload = function () {
+      if (xhr.status === 200) {
+         const notes = JSON.parse(xhr.responseText);
+         renderNotes(notes);
+      } else {
+         console.log('Ошибка загрузки заметок');
+      }
+   };
+   xhr.send();
+}
+
+// отображение списка заметок на странице
+function renderNotes(notes) {
+   const notesList = document.getElementById('notesList');
+   notes.forEach(function (note) {
+      const li = document.createElement('li');
+      const h3 = document.createElement('h3');
+      h3.textContent = note.title;
+      li.appendChild(h3);
+      const p = document.createElement('p');
+      p.textContent = note.body;
+      li.appendChild(p);
+      const deleteButton = document.createElement('button');
+      deleteButton.textContent = 'Удалить';
+      deleteButton.setAttribute('data-id', note.id);
+      li.appendChild(deleteButton);
+      notesList.appendChild(li);
+   });
+}
+
+// отправка AJAX-запроса на сервер для создания заметки
+function createNote() {
+   const title = document.getElementsByName('title')[0].value;
+   const body = document.getElementsByName('body')[0].value;
+   const xhr = new XMLHttpRequest();
+   xhr.open('POST', '/api/notes');
+   xhr.setRequestHeader('Content-Type', 'application/json');
+   xhr.onload = function () {
+      if (xhr.status === 200) {
+         const newNote = JSON.parse(xhr.responseText);
+         const notesList = document.getElementById('notesList');
+         const li = document.createElement('li');
+         const h3 = document.createElement('h3');
+         h3.textContent = newNote.title;
+         li.appendChild(h3);
+         const p = document.createElement('p');
+         p.textContent = newNote.body;
+         li.appendChild(p);
+         const deleteButton = document.createElement('button');
+ deleteBu Удалить
